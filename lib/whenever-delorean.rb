@@ -5,8 +5,10 @@ require 'parse-cron'
 
 class WheneverDelorean
   
-  def initialize(time)
+  def initialize(time, options)
     @destination_time = parse_date(time)
+    @match = options[:only]
+    raise 'must set the :only => //, option' unless @match
   end
   
   def self.time_travel_to(*arguments)
@@ -60,13 +62,20 @@ class WheneverDelorean
         if job.instance_variable_get("@template") == "runner"
           job.instance_variable_set("@job_template","")
           Whenever::Output::Cron.output(time,job) do |cron|
-            to_return << {:runner => job.instance_variable_get("@options")[:task], :cron_time => cron}
+            task = job.instance_variable_get("@options")[:task]
+            if should_include(task)
+              to_return << {:runner => task, :cron_time => cron}
+            end
           end
         end
       end
     end
     
     to_return
+  end
+  
+  def should_include(string)
+    string.match(@match)
   end
   
   def raw_whenever_jobs

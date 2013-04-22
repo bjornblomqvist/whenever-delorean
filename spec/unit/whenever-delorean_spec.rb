@@ -19,16 +19,16 @@ describe "WheneverDelorean" do
       WheneverDelorean.time_travel_to("3 days from now")
       
       whenever_delorean.should_receive(:time_travel)
-      WheneverDelorean.should_receive(:new).with("3 days from now", :a_option => "").and_return(whenever_delorean)
+      WheneverDelorean.should_receive(:new).with("3 days from now", :only => /something/).and_return(whenever_delorean)
       
-      WheneverDelorean.time_travel_to("3 days from now", :a_option => "")
+      WheneverDelorean.time_travel_to("3 days from now", :only => /something/)
       
     end
   end
   
   describe "#time_travel" do
     
-    subject { WheneverDelorean.new(nil) }
+    subject { WheneverDelorean.new(nil,{:only => /./}) }
     
     it 'should run all the jobs at the correct time and then time travel to the given time' do
       
@@ -46,7 +46,7 @@ describe "WheneverDelorean" do
   
   describe "#parse_date" do
     
-    subject { WheneverDelorean.new(nil) }
+    subject { WheneverDelorean.new(nil,{:only => /./}) }
     
     it 'should covert string to time when posible' do
       
@@ -89,7 +89,7 @@ describe "WheneverDelorean" do
       time_mock = mock("time mock")
       
       WheneverDelorean.any_instance.should_receive(:parse_date).with(time_mock).and_return("result")
-      WheneverDelorean.new(time_mock).send(:destination_time).should == "result"
+      WheneverDelorean.new(time_mock, :only => //).send(:destination_time).should == "result"
       
     end
     
@@ -97,7 +97,7 @@ describe "WheneverDelorean" do
   
   describe "#run_jobs" do
     
-    subject { WheneverDelorean.new(nil) }
+    subject { WheneverDelorean.new(nil,{:only => /./}) }
     
     it 'should iterate all the jobs and run time at the correct time' do
       
@@ -117,7 +117,7 @@ describe "WheneverDelorean" do
   
   describe "#jobs" do
     
-    subject { WheneverDelorean.new(nil) }
+    subject { WheneverDelorean.new(nil,{:only => /./}) }
     
     it 'should return all whenever jobs that should be run sorted acording to time' do
       
@@ -142,7 +142,7 @@ describe "WheneverDelorean" do
   
   describe '#get_run_times' do
     
-    subject { WheneverDelorean.new(nil) }
+    subject { WheneverDelorean.new(nil,{:only => /./}) }
     
     it 'should return all the run times for a cron time between now and destination_time' do
       
@@ -164,9 +164,22 @@ describe "WheneverDelorean" do
     
   end
   
+  describe "should_include" do
+    
+    subject { WheneverDelorean.new(nil, :only => /foo/) }
+    
+    it 'should return true when the given string matches the regex given at init' do
+    
+      subject.send(:should_include,"boo").should be_false
+      subject.send(:should_include,"foo").should be_true
+      
+    end 
+    
+  end
+  
   describe '#whenever_jobs' do
     
-    subject { WheneverDelorean.new(nil) }
+    subject { WheneverDelorean.new(nil,{:only => /./}) }
     
     it 'should get the whenever jobs and return them as simple hashes' do
       
@@ -174,11 +187,12 @@ describe "WheneverDelorean" do
       
       subject.should_receive(:raw_whenever_jobs).and_return(raw_jobs)
       
-      raw_jobs.each_pair do |time,jobs| 
+      raw_jobs.each_pair do |time,jobs|
         jobs.each_with_index do |job,index| 
           job.should_receive(:instance_variable_get).with("@template").and_return("runner")
           job.should_receive(:instance_variable_get).with("@options").and_return({:task => "dummy#{index+1}"})
           job.should_receive(:instance_variable_set).with("@job_template",'')
+          subject.should_receive(:should_include).with("dummy#{index+1}").and_return(true)
           Whenever::Output::Cron.should_receive(:output).with(time,job).and_yield("dummy_cron_time_#{index+1}")
         end
       end
@@ -187,6 +201,26 @@ describe "WheneverDelorean" do
         {:runner => "dummy1", :cron_time => "dummy_cron_time_1"},
         {:runner => "dummy2", :cron_time => "dummy_cron_time_2"}
       ]
+      
+    end
+    
+    it 'should skip all jobs that does not match the supplied regex ' do
+      
+      raw_jobs = {:month => [mock('job1'),mock('job2')]}
+      
+      subject.should_receive(:raw_whenever_jobs).and_return(raw_jobs)
+      
+      raw_jobs.each_pair do |time,jobs|
+        jobs.each_with_index do |job,index| 
+          job.should_receive(:instance_variable_get).with("@template").and_return("runner")
+          job.should_receive(:instance_variable_get).with("@options").and_return({:task => "dummy#{index+1}"})
+          job.should_receive(:instance_variable_set).with("@job_template",'')
+          subject.should_receive(:should_include).with("dummy#{index+1}").and_return(false)
+          Whenever::Output::Cron.should_receive(:output).with(time,job).and_yield("dummy_cron_time_#{index+1}")
+        end
+      end
+      
+      subject.send(:whenever_jobs).should == []
       
     end
     
@@ -210,7 +244,7 @@ describe "WheneverDelorean" do
   
   describe "#raw_whenever_jobs" do
     
-    subject { WheneverDelorean.new(nil) }
+    subject { WheneverDelorean.new(nil,{:only => /./}) }
     
     it 'should return the raw whenever jobs' do
       
@@ -229,7 +263,7 @@ describe "WheneverDelorean" do
   
   describe "#schedule_data" do
     
-    subject { WheneverDelorean.new(nil) }
+    subject { WheneverDelorean.new(nil,{:only => /./}) }
     
     it 'should return the data from the config/schedule.rb file' do
       

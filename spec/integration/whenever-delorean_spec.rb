@@ -19,7 +19,26 @@ describe "WheneverDelorean" do
   
       TestHelper.should_receive(:a_dummy_method).exactly(30).times
       
-      WheneverDelorean.time_travel_to("30 days from now")
+      WheneverDelorean.time_travel_to("30 days from now", :only => /a_dummy_method/)
+    end
+    
+    it 'should only run runners matching the regex' do
+      
+      Rails.should_receive(:root).and_return("/dummy-rails-root")
+      File.should_receive(:read).with("/dummy-rails-root/config/schedule.rb").and_return(%{
+        every 1.day, :at => '4:30 am' do
+          runner "TestHelper.a_dummy_method"
+        end
+        
+        every 1.day, :at => '5:30 am' do
+          runner "TestHelper.a_dummy"
+        end
+      })
+  
+      TestHelper.should_receive(:a_dummy_method).exactly(5).times
+      
+      WheneverDelorean.time_travel_to("5 days from now", :only => /a_dummy_method/)
+      
     end
     
     it 'should be able to handle multable runners' do
@@ -37,7 +56,7 @@ describe "WheneverDelorean" do
   
       TestHelper.should_receive(:a_dummy_method).exactly(10).times
       
-      WheneverDelorean.time_travel_to("5 days from now")
+      WheneverDelorean.time_travel_to("5 days from now", :only => /a_dummy_method/)
       
     end
     
@@ -56,7 +75,7 @@ describe "WheneverDelorean" do
   
       TestHelper.should_receive(:a_dummy_method).exactly(5).times
       
-      WheneverDelorean.time_travel_to("5 days from now")
+      WheneverDelorean.time_travel_to("5 days from now", :only => /a_dummy_method/) 
       
     end
     
