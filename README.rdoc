@@ -4,22 +4,22 @@ Helper for integration testing. It helps you trigger your whener runners.
 
 En example usage. The below will result in TestHelper.a_dummy_method being called 30 times
 
-`
- # config/schedule.rb
 
- every 1.week, :at => '4:30 am' do
+  # config/schedule.rb
+
+  every 1.week, :at => '4:30 am' do
     runner "TestHelper.something_else"
- end
+  end
  
- every 1.day, :at => '4:30 am' do
+  every 1.day, :at => '4:30 am' do
      runner "TestHelper.a_dummy_method"
   end
-`
 
-`
+
+
   # In your integration test
   WheneverDelorean.time_travel_to("30 days from now", :only => /a_dummy_method/)
-`
+
 
 == Contributing to whenever-delorean
  
