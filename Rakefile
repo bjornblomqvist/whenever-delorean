@@ -16,9 +16,9 @@ Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "whenever-delorean"
   gem.homepage = "http://github.com/bjornblomqvist/whenever-delorean"
-  gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.license = "LGPL"
+  gem.summary = %Q{Triggers your whener runners for you.}
+  gem.description = %Q{Helper for integration testing. It helps you trigger your whener runners.}
   gem.email = "darwin.git@marianna.se"
   gem.authors = ["Darwin"]
   # dependencies defined in Gemfile
