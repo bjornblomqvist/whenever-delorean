@@ -83,7 +83,7 @@ class WheneverDelorean
   end
   
   def schedule_data
-    File.read(Rails.root+"/config/schedule.rb")
+    File.read(Rails.root+"config/schedule.rb")
   end
   
   def get_run_times(cron_time)

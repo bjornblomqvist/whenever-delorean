@@ -267,8 +267,8 @@ describe "WheneverDelorean" do
     
     it 'should return the data from the config/schedule.rb file' do
       
-      Rails.should_receive(:root).and_return("/dummy_root")
-      File.should_receive(:read).with("/dummy_root/config/schedule.rb").and_return("dummy data")
+      Rails.should_receive(:root).and_return(Pathname.new("/dummy_root"))
+      File.should_receive(:read).with(Pathname.new("/dummy_root/config/schedule.rb")).and_return("dummy data")
       
       subject.send(:schedule_data).should == "dummy data"
       

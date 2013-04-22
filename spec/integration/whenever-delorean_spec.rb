@@ -10,8 +10,8 @@ describe "WheneverDelorean" do
     
     it "should take us to the supplied time and trigger all whenever jobbs we pass" do
     
-      Rails.should_receive(:root).and_return("/dummy-rails-root")
-      File.should_receive(:read).with("/dummy-rails-root/config/schedule.rb").and_return(%{
+      Rails.should_receive(:root).and_return(Pathname.new("/dummy-rails-root"))
+      File.should_receive(:read).with(Pathname.new("/dummy-rails-root/config/schedule.rb")).and_return(%{
         every 1.day, :at => '4:30 am' do
           runner "TestHelper.a_dummy_method"
         end
@@ -24,8 +24,8 @@ describe "WheneverDelorean" do
     
     it 'should only run runners matching the regex' do
       
-      Rails.should_receive(:root).and_return("/dummy-rails-root")
-      File.should_receive(:read).with("/dummy-rails-root/config/schedule.rb").and_return(%{
+      Rails.should_receive(:root).and_return(Pathname.new("/dummy-rails-root"))
+      File.should_receive(:read).with(Pathname.new("/dummy-rails-root/config/schedule.rb")).and_return(%{
         every 1.day, :at => '4:30 am' do
           runner "TestHelper.a_dummy_method"
         end
@@ -43,8 +43,8 @@ describe "WheneverDelorean" do
     
     it 'should be able to handle multable runners' do
       
-      Rails.should_receive(:root).and_return("/dummy-rails-root")
-      File.should_receive(:read).with("/dummy-rails-root/config/schedule.rb").and_return(%{
+      Rails.should_receive(:root).and_return(Pathname.new("/dummy-rails-root"))
+      File.should_receive(:read).with(Pathname.new("/dummy-rails-root/config/schedule.rb")).and_return(%{
         every 1.day, :at => '4:30 am' do
           runner "TestHelper.a_dummy_method"
         end
@@ -62,8 +62,8 @@ describe "WheneverDelorean" do
     
     it 'should ignore rake tasks' do
       
-      Rails.should_receive(:root).and_return("/dummy-rails-root")
-      File.should_receive(:read).with("/dummy-rails-root/config/schedule.rb").and_return(%{
+      Rails.should_receive(:root).and_return(Pathname.new("/dummy-rails-root"))
+      File.should_receive(:read).with(Pathname.new("/dummy-rails-root/config/schedule.rb")).and_return(%{
         every 1.day, :at => '4:30 am' do
           rake "TestHelper.a_dummy_method"
         end
