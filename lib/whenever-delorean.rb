@@ -34,7 +34,11 @@ class WheneverDelorean
   end
   
   def run_jobs
-    jobs.each do |job|
+    jobs_to_run = jobs
+    
+    raise "There are no jobs to run!" if jobs_to_run.count == 0
+    
+    jobs_to_run.each do |job|
       Delorean.time_travel_to(job[:time])
       eval(job[:runner])
     end

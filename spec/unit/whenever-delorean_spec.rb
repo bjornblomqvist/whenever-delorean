@@ -99,7 +99,7 @@ describe "WheneverDelorean" do
     
     subject { WheneverDelorean.new(nil,{:only => /./}) }
     
-    it 'should iterate all the jobs and run time at the correct time' do
+    it 'should iterate all the jobs and run them at the correct time' do
       
       jobs = [{:runner => "TestHelper.dummy_method1", :time => Time.new(2010,01,01)}, {:runner => "TestHelper.dummy_method1", :time => Time.new(2010,01,01)}]
 
@@ -113,6 +113,18 @@ describe "WheneverDelorean" do
       subject.send(:run_jobs)
       
     end
+    
+    it 'should raise an error if there are no jobs to run' do
+      
+      jobs = []
+
+      subject.should_receive(:jobs).and_return(jobs)
+      jobs.should_receive(:count).and_return(0)
+
+      lambda { subject.send(:run_jobs) }.should raise_error("There are no jobs to run!")
+      
+    end
+    
   end
   
   describe "#jobs" do

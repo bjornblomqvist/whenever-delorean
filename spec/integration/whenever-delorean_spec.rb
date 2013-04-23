@@ -60,6 +60,17 @@ describe "WheneverDelorean" do
       
     end
     
+    it 'should raise an error if no job was run' do
+      
+      Rails.should_receive(:root).and_return(Pathname.new("/dummy-rails-root"))
+      File.should_receive(:read).with(Pathname.new("/dummy-rails-root/config/schedule.rb")).and_return(%{})
+      
+      lambda {
+        WheneverDelorean.time_travel_to("5 days from now", :only => /a_dummy_method/)
+      }.should raise_error("There are no jobs to run!")
+      
+    end
+    
     it 'should ignore rake tasks' do
       
       Rails.should_receive(:root).and_return(Pathname.new("/dummy-rails-root"))
