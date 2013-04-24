@@ -44,4 +44,4 @@ DEPENDENCIES
   parse-cron (~> 0.1.2)
   rdoc (~> 3.12)
   rspec (~> 2.8.0)
-  whenever (~> 0.8)
+  whenever (~> 0.7)
