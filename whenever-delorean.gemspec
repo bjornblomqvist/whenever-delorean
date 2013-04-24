@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Darwin"]
-  s.date = "2013-04-23"
+  s.date = "2013-04-24"
   s.description = "Helper for integration testing. It helps you trigger your whener runners."
   s.email = "darwin.git@marianna.se"
   s.extra_rdoc_files = [
@@ -42,7 +42,7 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<delorean>, ["~> 2.1"])
-      s.add_runtime_dependency(%q<whenever>, ["~> 0.8"])
+      s.add_runtime_dependency(%q<whenever>, ["~> 0.7"])
       s.add_runtime_dependency(%q<parse-cron>, ["~> 0.1.2"])
       s.add_development_dependency(%q<rspec>, ["~> 2.8.0"])
       s.add_development_dependency(%q<rdoc>, ["~> 3.12"])
@@ -50,7 +50,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<ZenTest>, [">= 0"])
     else
       s.add_dependency(%q<delorean>, ["~> 2.1"])
-      s.add_dependency(%q<whenever>, ["~> 0.8"])
+      s.add_dependency(%q<whenever>, ["~> 0.7"])
       s.add_dependency(%q<parse-cron>, ["~> 0.1.2"])
       s.add_dependency(%q<rspec>, ["~> 2.8.0"])
       s.add_dependency(%q<rdoc>, ["~> 3.12"])
@@ -59,7 +59,7 @@ Gem::Specification.new do |s|
     end
   else
     s.add_dependency(%q<delorean>, ["~> 2.1"])
-    s.add_dependency(%q<whenever>, ["~> 0.8"])
+    s.add_dependency(%q<whenever>, ["~> 0.7"])
     s.add_dependency(%q<parse-cron>, ["~> 0.1.2"])
     s.add_dependency(%q<rspec>, ["~> 2.8.0"])
     s.add_dependency(%q<rdoc>, ["~> 3.12"])
