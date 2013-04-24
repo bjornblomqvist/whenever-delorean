@@ -1,7 +1,7 @@
 source "http://rubygems.org"
 
 gem "delorean", "~> 2.1"
-gem "whenever", "~> 0.8"
+gem "whenever", "~> 0.7"
 gem "parse-cron", "~> 0.1.2"
 
 group :development do
